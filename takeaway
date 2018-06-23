@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
 
-require './lib/takeaway'
+require './lib/controller'
 
-Takeaway.run
+Controller.start

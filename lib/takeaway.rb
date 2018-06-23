@@ -11,25 +11,11 @@ class Takeaway
     @output = output
   end
 
-  def self.run(input = $stdin, takeaway = Takeaway.new)
-    loop do
-      input_string = input.gets || "exit"
-      command      = input_string.split(" ").first
-
-      if command == "exit"
-        takeaway.exit
-        break
-      elsif command == "list"
-        takeaway.list
-      end
-    end
+  def exit
+    @output.print "Goodbye!\n"
   end
 
   def list
     @output.print DISHES.map { |dish| "#{dish[:name].titleize}: $#{dish[:price]}\n" }.join
-  end
-
-  def exit
-    @output.print "Goodbye!\n"
   end
 end
