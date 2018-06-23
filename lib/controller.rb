@@ -2,26 +2,31 @@ require_relative './takeaway'
 
 # Understands routing the commands given to the program
 class Controller
-  def initialize(input, takeaway)
-    @input    = input
+  COMMANDS = {
+    "exit" => proc { @takeaway.exit; raise StopIteration },
+    "list" => proc { @takeaway.list }
+  }
+
+  def initialize(io, takeaway)
+    @io       = io
     @takeaway = takeaway
   end
 
-   def self.start(input = $stdin, takeaway = Takeaway.new)
-    new(input, takeaway).start
+   def self.start(io = $stdin, takeaway = Takeaway.new)
+    new(io, takeaway).start
   end
 
   def start
-    loop do
-      input_string = @input.gets || "exit"
-      command      = input_string.split(" ").first
+    loop { instance_exec(&COMMANDS[command]) }
+  end
 
-      if command == "exit"
-        @takeaway.exit
-        break
-      elsif command == "list"
-        @takeaway.list
-      end
-    end
+  private
+
+  def command
+    input.first
+  end
+
+  def input
+    (@io.gets || "exit").split(" ")
   end
 end
